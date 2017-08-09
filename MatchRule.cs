@@ -130,11 +130,13 @@ namespace RupPub
 
         public override bool IsMatch(FileInfo fi)
         {
-            string fullPath = fi.FullName;
+            string fullPath = fi.DirectoryName.TrimEnd(Path.DirectorySeparatorChar);
             return !Array.Exists<string>(SkipPathes,
                 s =>
                 {
-                    return (fullPath.IndexOf(Path.Combine(BaseFolder.FullName, s.Replace("/", "\\").TrimStart('\\')),
+                    if (fullPath.EndsWith(s, StringComparison.InvariantCultureIgnoreCase))
+                        return true;
+                    return (fullPath.IndexOf(Path.Combine(BaseFolder.FullName, s.Replace("/", "\\").TrimStart(Path.DirectorySeparatorChar)),
                         StringComparison.InvariantCultureIgnoreCase) != -1);
                 });
         }
