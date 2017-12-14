@@ -40,7 +40,6 @@ namespace RupPub
                     {
                         if (Directory.Exists(args[0]))
                         {
-
                             ZipStorer.CreateZipFromDir(Path.Combine((new DirectoryInfo(args[0])).Parent.FullName, DateTime.Now.ToString("yyyyMMddhhmmss") + ".zip"),
                                 args[0], null);
                         }
