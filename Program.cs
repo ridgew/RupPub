@@ -52,7 +52,8 @@ namespace RupPub
             else
             {
                 string fDirPath = ".";
-                string pDirPath = "", zipFilePath = "";
+                string pDirPath = "", targetFileOrPubRulePath = "";
+                bool isMultiTargetPub = false;
                 List<MatchRule> ruleList = new List<MatchRule>();
                 bool showInConsole = false;
                 for (int i = 0, j = args.Length; i < j; i++)
@@ -133,9 +134,10 @@ namespace RupPub
                         continue;
                     }
 
-                    if (arg == "/zfile")
+                    //共用参数逻辑
+                    if (arg == "/zfile" || arg == "/mtf")
                     {
-                        zipFilePath = (args[i + 1].Trim('"', '\''));
+                        targetFileOrPubRulePath = (args[i + 1].Trim('"', '\''));
 
                         i++;
                         continue;
@@ -153,18 +155,24 @@ namespace RupPub
                 else
                 {
                     bool pubed = false;
-                    if (!string.IsNullOrEmpty(zipFilePath))
+                    if (!string.IsNullOrEmpty(targetFileOrPubRulePath))
                     {
                         //Console.WriteLine(allFiles.Length);
-                        (new ZipStorerPub(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, zipFilePath))).Pub(di, allFiles);
-                        pubed = true;
-                        Console.WriteLine("Zip文件包发布完成");
+                        if (isMultiTargetPub)
+                        {
+                            pubed = new MultiTargetPub(targetFileOrPubRulePath).Pub(di, allFiles);
+                            Console.WriteLine("多目标发布完成");
+                        }
+                        else
+                        {
+                            pubed = (new ZipStorerPub(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, targetFileOrPubRulePath))).Pub(di, allFiles);
+                            Console.WriteLine("Zip文件包发布完成");
+                        }
                     }
 
                     if (!string.IsNullOrEmpty(pDirPath))
                     {
-                        (new FileSystemPub(new DirectoryInfo(pDirPath))).Pub(di, allFiles);
-                        pubed = true;
+                        pubed = (new FileSystemPub(new DirectoryInfo(pDirPath))).Pub(di, allFiles);
                         Console.WriteLine("目录发布完成");
                     }
 
@@ -180,7 +188,7 @@ namespace RupPub
             /****************************
              *  /tz /am /ske /fdir /pdir /show ? help
              * **************************/
-        help:
+            help:
             Console.WriteLine("/tz \"2014-07-01,2014-07-15\" 时间区间，英文逗号分隔时间值。");
             Console.WriteLine("/am \"2014-07-01 08:00:00\" 在某个时间之后修改的。");
             Console.WriteLine("/ske \".pdb;.cs;.txt\" 忽略的文件扩展名列表");
@@ -188,11 +196,12 @@ namespace RupPub
             Console.WriteLine("-h   忽略带隐藏属性的文件");
             Console.WriteLine("/skp \"obj;Reference;Libs\" 忽略的相对目录列表");
             Console.WriteLine("/zfile 生成的zip发布包文件名称");
+            Console.WriteLine("/mtf  多目标发布规则文件");
             Console.WriteLine("/fdir \"获取文件目录路径\"");
             Console.WriteLine("/pdir \"发布文件目录路径\"");
             Console.WriteLine("/show 查看满足条件的所有文件");
 
-        endProcess:
+            endProcess:
             Console.WriteLine();
 
         }

@@ -74,6 +74,7 @@
   <ItemGroup>
     <Compile Include="FileDirMaker.cs" />
     <Compile Include="MatchRule.cs" />
+    <Compile Include="MultiTargetPub.cs" />
     <Compile Include="PackagePub.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

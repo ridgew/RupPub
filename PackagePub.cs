@@ -5,12 +5,12 @@ namespace RupPub
 {
     public abstract class PackagePub
     {
-        public abstract void Pub(DirectoryInfo baseDi, FileInfo[] allFiles);
+        public abstract bool Pub(DirectoryInfo baseDi, FileInfo[] allFiles);
     }
 
     public class ConsoleViewPub : PackagePub
     {
-        public override void Pub(DirectoryInfo baseDi, FileInfo[] allFiles)
+        public override bool Pub(DirectoryInfo baseDi, FileInfo[] allFiles)
         {
             DirectoryInfo di = baseDi;
             foreach (FileInfo fi in allFiles)
@@ -19,6 +19,7 @@ namespace RupPub
                     fi.FullName.Replace(di.FullName, ""),
                     fi.LastWriteTime).TrimStart('\\'));
             }
+            return true;
         }
     }
 
@@ -31,7 +32,7 @@ namespace RupPub
 
         public DirectoryInfo PubDirectory { get; set; }
 
-        public override void Pub(DirectoryInfo baseDi, FileInfo[] allFiles)
+        public override bool Pub(DirectoryInfo baseDi, FileInfo[] allFiles)
         {
             string targetPath = null;
             int baseLen = baseDi.FullName.Length;
@@ -48,6 +49,7 @@ namespace RupPub
                 fi.CopyTo(targetPath, true);
                 File.SetLastWriteTime(targetPath, fi.LastWriteTime);
             }
+            return true;
         }
     }
 
@@ -60,17 +62,18 @@ namespace RupPub
 
         public string ZipFilePath { get; set; }
 
-        public override void Pub(DirectoryInfo baseDi, FileInfo[] allFiles)
+        public override bool Pub(DirectoryInfo baseDi, FileInfo[] allFiles)
         {
             using (ZipStorer zip = ZipStorer.Create(ZipFilePath, ""))
             {
                 int trimLen = baseDi.FullName.Length;
                 foreach (FileInfo fi in allFiles)
                 {
-                    zip.AddFile(System.IO.ZipStorer.Compression.Deflate, fi.FullName, 
+                    zip.AddFile(System.IO.ZipStorer.Compression.Deflate, fi.FullName,
                         fi.FullName.Substring(trimLen).TrimStart(Path.DirectorySeparatorChar), "");
                 }
             }
+            return true;
         }
     }
 }
