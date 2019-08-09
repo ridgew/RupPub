@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<mtp basedir="D:\work\publish">
+  <globalRule>
+    <overwriter cmp="Newer" />
+  </globalRule>
+  
+  <referRule>
+    <rule id="WebClient" contains="\WebClient\" newTo="." applyFor="Path" />
+    <rule id="wpfclient" contains="\WpfClient\" newTo="." applyFor="Path" />
+    <rule id="apihost" contains="\SIE.WebApiHost\" newTo="." applyFor="Path" />
+  </referRule>
+  
+  <!-- ApiHost发布规则 -->
+  <file subdir="api" >
+    <rule startWith="appsettings.*" newTo="." applyFor="Name">
+      <rule refid="apihost" />
+    </rule>
+    
+    <rule startWith="SIE.WebApiHost.*" newTo="." applyFor="Name">
+      <rule refid="apihost" />
+    </rule>
+    <rule startWith="SIE." newTo="." applyFor="Name"></rule>
+    <rule startWith="Castle" applyFor="Name" newTo="." />
+    <rule startWith="Newtonsoft" applyFor="Name" newTo="." />
+    <rule startWith="log4net" applyFor="Name" newTo="." />
+    <rule startWith="ICSharpCode" applyFor="Name" newTo="." />
+    <rule startWith="NPOI." applyFor="Name" newTo="." />
+    <rule startWith="Microsoft.AspNetCore" applyFor="Name" newTo="." />
+    <rule startWith="Microsoft.Extensions" applyFor="Name" newTo="." />
+    <rule startWith="System." newTo="." applyFor="Name"></rule>
+    
+  </file>
+  
+  <!-- B/S Portal发布规则 -->
+  <file subdir="web">
+    
+    <rule startWith="appsettings.*" newTo="." applyFor="Name">
+      <rule refid="WebClient" />
+    </rule>
+    
+    <rule startWith="WebClient.*" newTo="." applyFor="Name">
+      <rule refid="WebClient" />
+    </rule>
+    
+    <rule startWith="SIE." newTo="." applyFor="Name"></rule>
+    <rule startWith="WebClient." newTo="." applyFor="Name" attachedExt=".pdb"></rule>
+    <rule startWith="Castle" applyFor="Name" newTo="." />
+    <rule startWith="Newtonsoft" applyFor="Name" newTo="." />
+    <rule startWith="log4net" applyFor="Name" newTo="." />
+    <rule startWith="ICSharpCode" applyFor="Name" newTo="." />
+    <rule startWith="NPOI." applyFor="Name" newTo="." />
+    <rule startWith="Microsoft.AspNetCore" applyFor="Name" newTo="." />
+    <rule startWith="Microsoft.Extensions" applyFor="Name" newTo="." />
+    <rule startWith="Microsoft.IdentityModel" applyFor="Name" newTo="." />
+    <rule startWith="System." newTo="." applyFor="Name"></rule>
+  </file>
+
+  <!-- WPF 客户端发布规则 -->
+  <file subdir="wpf">
+    <rule startWith="Loader.dll" newTo="." applyFor="Name"></rule>
+    <rule startWith="log4net.config" newTo="." applyFor="Name"></rule>
+    <rule startWith="SMOM." newTo="." applyFor="Name" attachedExt=".pdb;.config" />
+    <rule startWith="appsettings.json" newTo="." applyFor="Name">
+      <rule refid="wpfclient" />
+    </rule>
+    
+    <rule startWith="System." newTo="lib" applyFor="Name"></rule>
+    <rule startWith="DevExpress." newTo="lib" applyFor="Name"></rule>
+    <rule startWith="Telerik." newTo="lib" applyFor="Name"></rule>
+    <rule startWith="SuperSocket." applyFor="Name" newTo="lib" />
+    <rule startWith="NPOI." applyFor="Name" newTo="lib" />
+    <rule startWith="Newtonsoft" applyFor="Name" newTo="lib" />
+    <rule startWith="log4net" applyFor="Name" newTo="lib" />
+    <rule startWith="ICSharpCode" applyFor="Name" newTo="lib" />
+    <rule startWith="Castle" applyFor="Name" newTo="lib" />
+    
+    <rule startWith="SIE.Wpf." newTo="UI" applyFor="Name" attachedExt=".pdb;.config"></rule>
+
+    <rule startWith="Resources" newTo="Domain" applyFor="Name" attachedExt=".pdb;.config" />
+    <rule startWith="DnsClient" newTo="Domain" applyFor="Name"></rule>
+    <rule startWith="SIE." newTo="Domain" applyFor="Name"></rule>
+  </file>
+  
+</mtp>
